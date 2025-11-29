@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.foodorderapplication.HistoryData
 import com.example.foodorderapplication.R
 import com.example.foodorderapplication.adapter.BuyAgainAdapter
 import com.example.foodorderapplication.databinding.FragmentHistoryBinding
@@ -28,15 +29,19 @@ class HistoryFragment: Fragment() {
         return binding.root
     }
 
-    private fun setupRecyclerView(){
-        val buyAgainFoodName = arrayListOf("Food 1", "Food 2", "Food 3")
-        val buyAgainFoodPrice = arrayListOf("$10","$5","$8")
-        val buyAgainFoodImage = arrayListOf(R.drawable.menu1,R.drawable.menu5,R.drawable.menu4)
-        buyAgainAdapter = BuyAgainAdapter(buyAgainFoodName,buyAgainFoodPrice,buyAgainFoodImage)
-        binding.BuyAgainRecyclerView.adapter= buyAgainAdapter
-        binding.BuyAgainRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-    }
-    companion object{
+    private fun setupRecyclerView() {
+        // Take items from HistoryData
+        val buyAgainFoodName = ArrayList(HistoryData.names)
+        val buyAgainFoodPrice = ArrayList(HistoryData.prices)
+        val buyAgainFoodImage = ArrayList(HistoryData.images)
 
+        buyAgainAdapter = BuyAgainAdapter(
+            buyAgainFoodName,
+            buyAgainFoodPrice,
+            buyAgainFoodImage
+        )
+
+        binding.BuyAgainRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.BuyAgainRecyclerView.adapter = buyAgainAdapter
     }
 }

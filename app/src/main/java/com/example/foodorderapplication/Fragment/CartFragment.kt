@@ -7,10 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.foodorderapplication.CartData
 import com.example.foodorderapplication.PayOutActivity
-import com.example.foodorderapplication.R
 import com.example.foodorderapplication.adapter.CartAdapter
-
 import com.example.foodorderapplication.databinding.FragmentCartBinding
 
 class CartFragment : Fragment() {
@@ -23,30 +22,65 @@ class CartFragment : Fragment() {
     ): View {
         binding = FragmentCartBinding.inflate(inflater, container, false)
 
-        val cartFoodName = listOf("Burger", "Sandwich", "Momo", "Item", "Sandwich", "Momo")
-        val cartItemPrice = listOf("$5", "$6", "$8", "$9", "$10", "$10")
-        val cartImages = listOf(
-            R.drawable.menu1,
-            R.drawable.menu2,
-            R.drawable.menu3,
-            R.drawable.menu4,
-            R.drawable.menu5,
-            R.drawable.menu6,
-        )
+        val isEmpty = CartData.foodNames.isEmpty()
 
-        val adapter = CartAdapter(ArrayList(cartFoodName), ArrayList(cartItemPrice), ArrayList(cartImages))
+        if (isEmpty) {
+            showEmptyState()
+        } else {
+            showNonEmptyState()
 
-        binding.CardrecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        binding.CardrecyclerView.adapter = adapter
-binding.buttonProceed.setOnClickListener{
-    val intent = Intent(requireContext(),PayOutActivity::class.java)
-    startActivity(intent)
-}
+            val adapter = CartAdapter(
+                CartData.foodNames,
+                CartData.prices,
+                CartData.images,
+                CartData.quantities
+            ) { size ->
+                // 👇 this runs whenever adapter removes an item
+                if (size == 0) {
+                    showEmptyState()
+                } else {
+                    showNonEmptyState()
+                }
+            }
+
+            binding.CardrecyclerView.layoutManager = LinearLayoutManager(requireContext())
+            binding.CardrecyclerView.adapter = adapter
+
+            binding.buttonProceed.setOnClickListener {
+                val totalAmount = calculateTotalAmount()
+                val intent = Intent(requireContext(), PayOutActivity::class.java)
+                intent.putExtra("TOTAL_AMOUNT", totalAmount)
+                startActivity(intent)
+            }
+        }
 
         return binding.root
     }
 
-    companion object {
-        // If you plan to use factory methods later
+    private fun showEmptyState() {
+        binding.emptyCartAnimation.visibility = View.VISIBLE
+        //binding.emptyCartMessage.visibility = View.VISIBLE
+        binding.CardrecyclerView.visibility = View.GONE
+        binding.buttonProceed.visibility = View.GONE
+    }
+
+    private fun showNonEmptyState() {
+        binding.emptyCartAnimation.visibility = View.GONE
+        //binding.emptyCartMessage.visibility = View.GONE
+        binding.CardrecyclerView.visibility = View.VISIBLE
+        binding.buttonProceed.visibility = View.VISIBLE
+    }
+
+    private fun calculateTotalAmount(): Double {
+        var total = 0.0
+        for (i in CartData.foodNames.indices) {
+            val priceString = CartData.prices[i].replace("$", "").trim()
+            val price = priceString.toDoubleOrNull() ?: 0.0
+            val quantity = CartData.quantities.getOrNull(i) ?: 1
+            total += price * quantity
+        }
+        return total
     }
 }
+
+

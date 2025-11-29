@@ -17,8 +17,8 @@ class SearchFragment :Fragment () {
     private lateinit var binding: FragmentSearchBinding
     private lateinit var adapter: menuAdapter
     private val originalMenuFoodName =
-        listOf("Burger", "Sandwich", "Momo", "Item", "Sandwich", "Momo")
-    private val OriginalmenuItemPrice = listOf("$5", "$6", "$8", "$9", "$10", "$10")
+        listOf("Burger", "Soup", "Pasta", "Rolls", "Sandwich", "Salad")
+    private val OriginalmenuItemPrice = listOf("$5", "$6", "$8", "$9", "$10", "$9")
     private val OriginalmenuImages = listOf(
         R.drawable.menu1,
         R.drawable.menu2,
@@ -41,7 +41,7 @@ class SearchFragment :Fragment () {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentSearchBinding.inflate(inflater, container, false)
-        adapter = menuAdapter(filteredMenuFoodName, filteredMenuItemPrice, filteredMenuImage)
+        adapter = menuAdapter(filteredMenuFoodName, filteredMenuItemPrice, filteredMenuImage,requireContext())
         binding.menuRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         binding.menuRecyclerView.adapter = adapter
 

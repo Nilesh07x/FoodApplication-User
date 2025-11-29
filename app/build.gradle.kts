@@ -1,6 +1,7 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -16,9 +17,10 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-buildFeatures{
-    viewBinding = true
-}
+
+    buildFeatures {
+        viewBinding = true
+    }
 
     buildTypes {
         release {
@@ -39,7 +41,11 @@ buildFeatures{
 }
 
 dependencies {
+    // ✅ Firebase
+    implementation("com.google.firebase:firebase-auth:22.3.0")
+    implementation("com.google.firebase:firebase-firestore:25.0.0")
 
+    // ✅ AndroidX & other libs from catalog
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -47,13 +53,12 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    implementation ("com.github.denzcoskun:ImageSlideshow:0.1.0")
+
+    // Image slider & Lottie
     implementation("com.github.denzcoskun:ImageSlideshow:0.1.2")
-
-
-
-
+    implementation("com.airbnb.android:lottie:6.4.0")
 }

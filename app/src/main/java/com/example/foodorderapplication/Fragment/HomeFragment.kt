@@ -5,18 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.interfaces.ItemClickListener
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.foodorderapplication.R
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.foodorderapplication.adapter.PopularViewHolder
 import com.example.foodorderapplication.adapter.popularAdapter
 import com.example.foodorderapplication.databinding.FragmentHomeBinding
-import com.example.foodorderapplication.databinding.FragmentMenuBottomSheetBinding
 import com.example.foodorderapplication.menuBottomSheetFragment
 
 class HomeFragment : Fragment() {
@@ -30,16 +26,35 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        binding.viewAllMenu.setOnClickListener{
-            val bottomSheetDialog= menuBottomSheetFragment()
-            bottomSheetDialog.show(parentFragmentManager,"Test")
+        // When clicking View Menu
+        binding.viewAllMenu.setOnClickListener {
+            // ✔ Show menu list + title
+            binding.popularRecyclerView.visibility = View.VISIBLE
+            binding.textView22.visibility = View.VISIBLE
+
+            // ❗ Hide hint text once menu is opened
+            binding.homeHintText.visibility = View.GONE
+
+            // ✔ Open bottom sheet
+            val bottomSheetDialog = menuBottomSheetFragment()
+            bottomSheetDialog.show(parentFragmentManager, "Test")
         }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // ---------------------------------------------------------
+        // ✔ HIDE MENU INITIALLY, SHOW HINT
+        // ---------------------------------------------------------
+        binding.popularRecyclerView.visibility = View.GONE
+        binding.textView22.visibility = View.GONE
+        binding.homeHintText.visibility = View.VISIBLE
+        // ---------------------------------------------------------
+
+        // IMAGE SLIDER
         val imageList = ArrayList<SlideModel>().apply {
             add(SlideModel(R.drawable.banner1, ScaleTypes.FIT))
             add(SlideModel(R.drawable.foodbanner3, ScaleTypes.FIT))
@@ -47,11 +62,15 @@ class HomeFragment : Fragment() {
         }
 
         binding.imageSlider.setImageList(imageList, ScaleTypes.FIT)
+        binding.imageSlider.startSliding(2000)
 
         binding.imageSlider.setItemClickListener(object : ItemClickListener {
             override fun doubleClick(position: Int) {
-                // Avoid using TODO without a handler. Just log or leave empty
-                Toast.makeText(requireContext(), "Double clicked: $position", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(),
+                    "Double clicked: $position",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
 
             override fun onItemSelected(position: Int) {
@@ -59,16 +78,27 @@ class HomeFragment : Fragment() {
                 Toast.makeText(requireContext(), itemMessage, Toast.LENGTH_SHORT).show()
             }
         })
-        val foodName = listOf("Burger","Sandwich","momo","items")
-        val price = listOf("$5","$7","$8","$10")
-        val popularFoodImages = listOf(R.drawable.menu1,R.drawable.menu2,R.drawable.menu3,R.drawable.menu4)
-        val adapter = popularAdapter(foodName,price,popularFoodImages)
-        binding.popularRecyclerView.layoutManager= LinearLayoutManager(requireContext())
-        binding.popularRecyclerView.adapter=adapter
+
+        // POPULAR MENU
+        val foodName = listOf("Burger", "Soup", "Pasta", "Rolls","Salad","Fruits")
+        val price = listOf("$5", "$7", "$8", "$10","$9","$12")
+        val popularFoodImages = listOf(
+            R.drawable.menu1,
+            R.drawable.menu2,
+            R.drawable.menu3,
+            R.drawable.menu4,
+            R.drawable.menu6,
+            R.drawable.menu7,
+        )
+
+        val adapter = popularAdapter(foodName, price, popularFoodImages, requireContext())
+        binding.popularRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.popularRecyclerView.adapter = adapter
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
+        binding.imageSlider.stopSliding()
         _binding = null
+        super.onDestroyView()
     }
 }

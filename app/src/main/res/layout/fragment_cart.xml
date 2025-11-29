@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragment.CartFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- Cart Title -->
     <TextView
         android:id="@+id/textView25"
         android:layout_width="wrap_content"
@@ -15,31 +16,66 @@
         android:fontFamily="@font/yeonsungregular"
         android:text="@string/cart"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
+
+    <!-- 🛒 Lottie Empty Cart Animation -->
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/emptyCartAnimation"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
+        android:layout_marginTop="24dp"
+        android:visibility="visible"
+        app:lottie_rawRes="@raw/empty_cart"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:layout_constraintTop_toBottomOf="@+id/textView25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+<!--    &lt;!&ndash; 📝 Empty Cart Message &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/emptyCartMessage"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Your cart is empty 🛒"-->
+<!--        android:textSize="18sp"-->
+<!--        android:textColor="@android:color/black"-->
+<!--        android:fontFamily="@font/latobold"-->
+<!--        android:layout_marginTop="8dp"-->
+<!--        android:visibility="gone"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/emptyCartAnimation"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent" />-->
+
+
+    <!-- Cart List -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/CardrecyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView25"
         app:layout_constraintBottom_toTopOf="@+id/buttonProceed"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView25" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
+
+    <!-- Proceed Button -->
     <androidx.appcompat.widget.AppCompatButton
-        android:background="@drawable/proceedbtnshape"
         android:id="@+id/buttonProceed"
         android:layout_width="325dp"
         android:layout_height="57dp"
-        android:layout_marginBottom="8dp"
         android:text="Proceed"
         android:textAllCaps="false"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/proceedbtnshape"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
